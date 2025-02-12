@@ -2,6 +2,7 @@ package com.example.UserRegistrationSystem.dto;
 import jakarta.validation.constraints.*;
 import lombok.*;
 
+import java.time.*;
 import java.util.*;
 
 @AllArgsConstructor
@@ -13,19 +14,20 @@ public class UserDto {
     private String id;
 
     @NotBlank(message ="LOGIN_EMPTY")
-    private String login;
+    private String firstname;
+
+    @NotBlank(message ="LOGIN_EMPTY")
+    private String lastname;
 
     @Email(message = "EMAIL_INCORRECT")
     private String email;
+
+    @NotBlank
+    private LocalDate birthdate;
 
     @NotBlank(message = "PASS_EMPTY")
     @NotEmpty(message = "PASS_EMPTY")
     @Size( min = 6,message = "PASS_INCORRECT", max = 12)
     private String password;
 
-    private List<String> roles;
-
-    private Boolean state;
-
-    private String  status;
 }

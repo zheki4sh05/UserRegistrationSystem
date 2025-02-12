@@ -14,11 +14,11 @@ public class SignUpDto {
 
     @NotBlank
     @Size(min = 4, max = 20)
-    private String name;
+    private String firstname;
 
     @NotBlank
     @Size(min = 4, max = 20)
-    private String surname;
+    private String lastname;
 
     @NotBlank
     @Email
@@ -29,5 +29,7 @@ public class SignUpDto {
     private String password;
 
     @DateTimeFormat
-    private LocalDate birthday;
+    private LocalDate birthdate;
+
+
 }

@@ -2,15 +2,17 @@ package com.example.UserRegistrationSystem.controller;
 
 
 import com.example.UserRegistrationSystem.dto.*;
-import com.example.UserRegistrationSystem.service.impl.*;
+import com.example.UserRegistrationSystem.service.*;
 import com.example.UserRegistrationSystem.util.*;
 import jakarta.servlet.http.*;
 import jakarta.validation.*;
 import lombok.*;
 import lombok.extern.slf4j.*;
 import org.springframework.stereotype.*;
+import org.springframework.ui.*;
 import org.springframework.validation.*;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.*;
 
 @AllArgsConstructor
 @RequestMapping("/auth")
@@ -18,34 +20,46 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 public class AuthController {
 
-
-    private final AuthenticationServiceImpl authenticationService;
-
+    private final IAuthenticationService authenticationService;
     private final HttpResponseUtils httpResponseUtils;
-    private final HttpRequestUtils httpRequestUtils;
+
+    @GetMapping("")
+    public String welcome(
+            Model model
+    ){
+        model.addAttribute("auth", false);
+        return "login";
+    }
 
     @GetMapping("/login")
     public String login(
+            Model model
     ){
+        model.addAttribute("auth", false);
         return "login";
     }
 
     @GetMapping("/signup")
     public String signup(
-    ){
+            Model model
+            ){
+        model.addAttribute("auth", false);
         return "signup";
     }
 
     @PostMapping("/login")
-    public String login(
-            @ModelAttribute("auth") AuthDto authDto,
+    public ModelAndView login(
+            @ModelAttribute("login") AuthDto authDto,
             HttpServletResponse httpServletResponse
             ){
        AuthenticationResponse authenticationResponse =  authenticationService.authenticate(authDto);
        Cookie[] cookies = httpResponseUtils.createCookie(authenticationResponse);
        httpServletResponse.addCookie(cookies[0]);
        httpServletResponse.addCookie(cookies[1]);
-       return "profile";
+
+        ModelAndView modelAndView = new ModelAndView("redirect:/profile");
+        modelAndView.addObject("id", authenticationResponse.getUserDto().getId());
+       return modelAndView;
     }
 
 
@@ -56,10 +70,7 @@ public class AuthController {
             HttpServletResponse httpServletResponse
     ){
         AuthenticationResponse authenticationResponse =  authenticationService.register(signUpDto);
-        Cookie[] cookies = httpResponseUtils.createCookie(authenticationResponse);
-        httpServletResponse.addCookie(cookies[0]);
-        httpServletResponse.addCookie(cookies[1]);
-        return "profile";
+        return "redirect:/auth/login";
     }
 
 

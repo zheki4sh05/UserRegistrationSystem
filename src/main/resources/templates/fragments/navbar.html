@@ -1,0 +1,15 @@
+<th:block th:fragment="navbar (auth)">
+    <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #007bff;">
+        <div class="container-fluid">
+            <a class="navbar-brand text-white" href="/admin">
+                Registration system
+            </a>
+            <div th:if="${auth}">
+                <form action="#" th:action="@{/auth/logout}" method="post">
+                    <button type="submit" class="btn btn-danger">Logout</button>
+                </form>
+
+            </div>
+        </div>
+    </nav>
+</th:block>

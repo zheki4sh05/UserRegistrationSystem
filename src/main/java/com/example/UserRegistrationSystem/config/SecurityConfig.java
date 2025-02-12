@@ -2,7 +2,6 @@ package com.example.UserRegistrationSystem.config;
 
 
 import com.example.UserRegistrationSystem.filters.*;
-import com.example.UserRegistrationSystem.util.*;
 import lombok.*;
 import org.springframework.context.annotation.*;
 import org.springframework.http.*;
@@ -19,9 +18,6 @@ import org.springframework.security.core.userdetails.*;
 import org.springframework.security.crypto.bcrypt.*;
 import org.springframework.security.web.*;
 import org.springframework.security.web.authentication.*;
-import org.springframework.web.cors.*;
-
-import java.util.*;
 
 @Configuration
 @EnableWebSecurity
@@ -42,6 +38,7 @@ public class SecurityConfig{
                  .authorizeHttpRequests(authorizeRequests->
                          authorizeRequests
                                  .requestMatchers("/").permitAll()
+                                 .requestMatchers("/auth").permitAll()
                                  .requestMatchers("/auth/*").permitAll()
                                  .anyRequest().authenticated()
                  )
@@ -55,7 +52,7 @@ public class SecurityConfig{
                                 )
                                 .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)))
                 .logout(l->l
-                        .logoutUrl("auth/logout")
+                        .logoutUrl("/auth/logout")
                         .addLogoutHandler(logoutHandler)
                         .logoutSuccessHandler((request, response, authentication) -> SecurityContextHolder.clearContext()
                         ));

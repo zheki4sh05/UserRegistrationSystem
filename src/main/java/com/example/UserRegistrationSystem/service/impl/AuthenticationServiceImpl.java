@@ -17,8 +17,7 @@ import java.util.*;
 
 @Service
 @AllArgsConstructor
-@Slf4j
-public class AuthenticationServiceImpl {
+public class AuthenticationServiceImpl implements IAuthenticationService{
     private final UserRepository repository;
     private final JwtService jwtService;
     private final TokenRepository tokenRepository;
@@ -27,7 +26,7 @@ public class AuthenticationServiceImpl {
     public AuthenticationResponse register(SignUpDto authDto) {
 
 
-        Optional<User> isExist = repository.findByEmailOrLogin(authDto.getEmail());
+        Optional<User> isExist = repository.findByEmail(authDto.getEmail());
         if(isExist.isPresent()) {
             throw new EntityAlreadyExists();
         }
@@ -36,15 +35,16 @@ public class AuthenticationServiceImpl {
         String accessToken = jwtService.generateAccessToken(user);
         String refreshToken = jwtService.generateRefreshToken(user);
         saveUserToken(accessToken, refreshToken, user);
-        return new AuthenticationResponse(accessToken, refreshToken,"User registration was successful",null);
+        return new AuthenticationResponse(accessToken,
+                refreshToken,
+                "User registration was successful",
+                userMapper.toDto(user));
 
     }
 
     @Transactional
     public AuthenticationResponse authenticate(AuthDto request) {
-
-
-        User user = repository.getByEmailOrLogin(request.getLogin());
+        User user = repository.getByEmailOrLogin(request.getEmail());
         UserDto userDto = userMapper.toDto(user);
         String accessToken = jwtService.generateAccessToken(user);
         String refreshToken = jwtService.generateRefreshToken(user);
@@ -52,10 +52,15 @@ public class AuthenticationServiceImpl {
         saveUserToken(accessToken, refreshToken, user);
         return new AuthenticationResponse
                 (accessToken, refreshToken, "User login was successful", userDto);
-
     }
+
+    @Override
+    public AuthenticationResponse refreshToken() {
+        return null;
+    }
+
     private void revokeAllTokenByUser(User user) {
-        List<Token> validTokens = tokenRepository.findAllAccessTokensByUser(user.getUuid());
+        List<Token> validTokens = tokenRepository.findAllAccessTokensByUser(user.getId());
         if(validTokens.isEmpty()) {
             return;
         }
@@ -85,7 +90,7 @@ public class AuthenticationServiceImpl {
 
         String username = jwtService.extractUsername(token);
 
-        User user = repository.findByEmailOrLogin(username)
+        User user = repository.findByEmail(username)
                 .orElseThrow(()->new EntityNotFoundException());
 
         if(jwtService.isValidRefreshToken(token, user)) {

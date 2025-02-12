@@ -40,7 +40,15 @@ public class HttpResponseUtils {
     }
     private Cookie createTokenCookie(String name, String value, Long expired){
         Cookie cookie = new Cookie(name,value);
+        cookie.setPath("/");
         cookie.setMaxAge(expired.intValue());
+        return cookie;
+    }
+
+    public Cookie deleteCookie(String name) {
+        Cookie cookie = new Cookie(name,null);
+        cookie.setPath("/");
+        cookie.setMaxAge(0);
         return cookie;
     }
 }

@@ -6,4 +6,6 @@ public interface IProfileService {
     UserDto findById(String userId);
 
     UserDto update(UserDto userDto);
+
+    void deleteById(String userId);
 }

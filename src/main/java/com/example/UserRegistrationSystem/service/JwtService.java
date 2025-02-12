@@ -5,7 +5,8 @@ import com.example.UserRegistrationSystem.model.User;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.*;
 import io.jsonwebtoken.security.*;
-import org.springframework.beans.factory.annotation.*;
+import lombok.*;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.*;
 import org.springframework.stereotype.*;
 
@@ -15,6 +16,7 @@ import java.util.function.*;
 
 
 @Service
+@RequiredArgsConstructor
 public class JwtService {
 
     @Value("${application.security.jwt.secret-key}")
@@ -26,12 +28,7 @@ public class JwtService {
     @Value("${application.security.jwt.refresh-token-expiration}")
     private Long refreshTokenExpire;
 
-    public JwtService(TokenRepository tokenRepository) {
-        this.tokenRepository = tokenRepository;
-    }
-
-    @Autowired
-    private TokenRepository tokenRepository;
+    private final TokenRepository tokenRepository;
 
 
     public String extractUsername(String token) {

@@ -6,9 +6,9 @@ import jakarta.persistence.Table;
 import lombok.*;
 import org.hibernate.annotations.*;
 import org.springframework.security.core.*;
-import org.springframework.security.core.authority.*;
 import org.springframework.security.core.userdetails.*;
 
+import java.sql.*;
 import java.util.*;
 import java.util.UUID;
 
@@ -17,26 +17,26 @@ import java.util.UUID;
 @Data
 @Builder
 @Entity
-@Table(name="author")
+@Table(name= "worker",schema = "public")
 public class User implements UserDetails {
     @Column(name = "id")
     @Id
-    private UUID uuid;
+    private UUID id;
 
-    @Column(name = "login",unique = true)
-    private String login;
+    @Column(name = "firstname")
+    private String firstname;
 
-    @Column(name = "email", unique = true)
+    @Column(name = "lastname")
+    private String lastname;
+
+    @Column(name = "birthdate")
+    private Timestamp birthdate;
+
+    @Column(name = "email")
     private String email;
 
     @Column(name = "password")
     private String password;
-
-    @Column(name = "state")
-    private Boolean state;
-
-    @Column(name = "status")
-    private String status;
 
     @ToString.Exclude
     @Fetch(FetchMode.JOIN)
@@ -51,7 +51,7 @@ public class User implements UserDetails {
 
     @Override
     public String getUsername() {
-        return login;
+        return email;
     }
 
     @Override

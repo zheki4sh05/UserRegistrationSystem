@@ -15,33 +15,17 @@ public interface UserRepository extends JpaRepository<User, UUID> {
 
 select u 
 from User u 
-join fetch u.roles
-where u.email= :data or u.login= :data
+where u.email= :email
 """)
-    Optional<User> findByEmailOrLogin(@Param("data") String data);
-
-    @Query("""
-
-FROM User u where u.uuid != :id
-
-""")
-     List<User> findAll(@Param("id") String id);
-
-    Page<User> findByStatus(String status, Pageable pageable);
+    Optional<User> findByEmail(@Param("email") String data);
 
     @Query("""
 
 select u 
 from User u 
-join fetch u.roles
-where u.email=:data or u.login=:data
+where u.email=:data
 """)
-    User getByEmailOrLogin(@Param("data") String username);
+    User getByEmailOrLogin(@Param("data") String email);
 
-    @Query("""
-select u 
-from User u 
-where u.login like :login or u.email like :email
-""")
-    Page<User> searchByLoginOrEmail(@Param("login") String login, @Param("email") String email, Pageable pageable);
+
 }

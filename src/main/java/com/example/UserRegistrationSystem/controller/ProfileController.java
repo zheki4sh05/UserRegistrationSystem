@@ -2,10 +2,12 @@ package com.example.UserRegistrationSystem.controller;
 
 import com.example.UserRegistrationSystem.dto.*;
 import com.example.UserRegistrationSystem.service.*;
+import jakarta.validation.*;
 import lombok.*;
 import org.springframework.stereotype.*;
 import org.springframework.ui.*;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.*;
 
 @Controller
 @RequestMapping("/profile")
@@ -14,6 +16,7 @@ public class ProfileController {
 
     private final IProfileService profileService;
 
+
     @GetMapping("")
    public String getUserProfile(
             @RequestParam("id") String userId,
@@ -21,18 +24,28 @@ public class ProfileController {
     ){
         UserDto userDto = profileService.findById(userId);
         model.addAttribute("user", userDto);
+        model.addAttribute("auth", true);
         return "profile";
     }
 
 
-    @PutMapping("")
+    @PostMapping("")
     public String updateUserProfile(
-            @ModelAttribute("user") UserDto userDto,
+            @ModelAttribute("userDto") UserDto userDto,
             Model model
     ){
         UserDto updatedUserDto = profileService.update(userDto);
         model.addAttribute("user", updatedUserDto);
+        model.addAttribute("auth", true);
         return "profile";
+    }
+
+    @DeleteMapping("")
+    public String deleteUserProfile(
+            @RequestParam("id") String userId
+    ){
+      profileService.deleteById(userId);
+      return "redirect:/signup";
     }
 
 

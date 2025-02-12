@@ -25,7 +25,7 @@ public class JwtCookieAuthenticationFilter extends OncePerRequestFilter {
             throws ServletException, IOException {
 
 
-        if (!request.getServletPath().contains("admin")) {
+        if (request.getServletPath().contains("auth")) {
             filterChain.doFilter(request, response);
             return;
         }
@@ -48,7 +48,6 @@ public class JwtCookieAuthenticationFilter extends OncePerRequestFilter {
             }
         }else{
             filterChain.doFilter(request, response);
-            return;
         }
 
 

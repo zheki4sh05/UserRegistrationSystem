@@ -6,22 +6,6 @@ import org.springframework.stereotype.*;
 
 @Component
 public class HttpRequestUtils {
-
-    @Value("${client.hostName}")
-    private String host;
-
-    @Value("${client.port}")
-    private String port;
-
-    public HttpRequestUtils() {
-    }
-
-    public HttpRequestUtils(String host, String port) {
-        this.host = host;
-        this.port = port;
-    }
-
-
     public Boolean isPublic(HttpServletRequest httpRequest){
         var path = httpRequest.getServletPath();
         for (PublicPath p : PublicPath.values()) {
@@ -31,8 +15,5 @@ public class HttpRequestUtils {
         }
         return false;
     }
-
-
-
 
 }

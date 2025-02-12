@@ -11,7 +11,7 @@ import java.util.*;
 @Data
 @Builder
 @Entity
-@Table(name="user_role")
+@Table(name="user_role",schema = "public")
 public class UserRole implements GrantedAuthority {
 
     @Column(name = "id")
@@ -19,11 +19,11 @@ public class UserRole implements GrantedAuthority {
     private UUID uuid;
 
     @ManyToOne
-    @JoinColumn(name = "userid")
+    @JoinColumn(name = "user_id")
     @ToString.Exclude
     private User user;
 
-    @Column(name = "role")
+    @Column(name = "name")
     private String role;
 
     @Override

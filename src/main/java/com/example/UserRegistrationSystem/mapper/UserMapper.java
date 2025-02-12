@@ -3,39 +3,38 @@ package com.example.UserRegistrationSystem.mapper;
 import com.example.UserRegistrationSystem.dto.*;
 import com.example.UserRegistrationSystem.model.*;
 import com.example.UserRegistrationSystem.util.*;
+import jakarta.validation.constraints.*;
 import org.mapstruct.*;
 
+import java.sql.*;
+import java.time.*;
 import java.util.*;
-import java.util.stream.*;
 
 @Mapper(componentModel = "spring")
 public interface UserMapper {
 
     @Mappings({
-            @Mapping(target = "id", expression = "java(user.getUuid().toString())"),
+            @Mapping(target = "id", expression = "java(user.getId().toString())"),
             @Mapping(source = "email", target = "email"),
-            @Mapping(source = "login", target = "login"),
-            @Mapping(source = "status", target = "status"),
-            @Mapping(source = "state", target = "state"),
+            @Mapping(source = "firstname", target = "firstname"),
+            @Mapping(source = "lastname", target = "lastname"),
             @Mapping(target = "password", ignore = true),
-            @Mapping(target = "roles", qualifiedByName = "mapRolesToNames")
+            @Mapping(target = "birthdate",  qualifiedByName = "local"),
     })
     UserDto toDto(User user);
 
-    @Named("mapRolesToNames")
-    default List<String> mapRolesToNames(List<UserRole> userRoles) {
-        return userRoles.stream()
-                .map(UserRole::getRole)
-                .collect(Collectors.toList());
+    @Named("local")
+    default LocalDate local(Timestamp timestamp) {
+        return timestamp.toLocalDateTime().toLocalDate();
     }
 
     @Mappings({
-            @Mapping(target = "uuid", expression = "java(java.util.UUID.randomUUID())"),
+            @Mapping(target = "id", expression = "java(java.util.UUID.randomUUID())"),
             @Mapping(target = "email", source = "email"),
-            @Mapping(target = "login", source = "login"),
-            @Mapping(target = "status",expression = "java(com.example.topichubbackend.dto.StatusDto.ACTIVE.type())"),
-            @Mapping(target = "state", ignore = true),
+            @Mapping(source = "firstname", target = "firstname"),
+            @Mapping(source = "lastname", target = "lastname"),
             @Mapping(target = "password",  qualifiedByName = "hash"),
+            @Mapping(target = "birthdate",  qualifiedByName = "date"),
     })
     User mapFrom(SignUpDto user);
 
@@ -44,19 +43,15 @@ public interface UserMapper {
        return UUID.randomUUID();
     }
 
+    @Named("date")
+    default Timestamp date(LocalDate localDate) {
+        return Timestamp.valueOf(localDate.atStartOfDay());
+    }
+
     @Named("hash")
     default String hash(String password) {
         return new PasswordEncoderWrapper().hash(password);
     }
 
 
-    @Mapping(target = "id", expression = "java(user.getUuid().toString())")
-    @Mapping(source = "email", target = "email")
-    @Mapping(source = "login", target = "login")
-    @Mapping(target = "password",ignore = true)
-    @Mapping(target = "roles",ignore = true)
-    @Mapping(target = "state",ignore = true)
-    @Mapping(target = "status",ignore = true)
-    @Named("toAuthor")
-    UserDto toAuthor(User user);
 }

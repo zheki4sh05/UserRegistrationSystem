@@ -7,7 +7,7 @@ import lombok.*;
 import java.util.*;
 
 @Entity
-@Table(name = "token")
+@Table(name = "token",schema = "public")
 @Getter
 @Setter
 public class Token {
