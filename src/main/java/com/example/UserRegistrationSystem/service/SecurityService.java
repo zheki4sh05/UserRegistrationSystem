@@ -14,7 +14,7 @@ import org.springframework.stereotype.*;
 public class SecurityService {
     private final JwtService jwtService;
     private final UserDetailsService userDetailsService;
-    public boolean check(String username, String token, HttpServletRequest httpServletRequest){
+    public void check(String username, String token, HttpServletRequest httpServletRequest){
 
         if(username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
 
@@ -32,10 +32,9 @@ public class SecurityService {
                 );
 
                 SecurityContextHolder.getContext().setAuthentication(authToken);
-                return true;
             }
         }
-        return false;
+
 
     }
 }

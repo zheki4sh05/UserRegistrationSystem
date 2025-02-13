@@ -44,7 +44,7 @@ public class ProfileServiceImpl implements IProfileService {
             user.setBirthdate(Timestamp.valueOf(userDto.getBirthdate().atStartOfDay()));
             if(!userDto.getPassword().trim().isEmpty()){
                 if(userDto.getPassword().length()>5 && userDto.getPassword().length()<21){
-                    user.setPassword(userDto.getPassword());
+                    user.setPassword(new PasswordEncoderWrapper().hash(userDto.getPassword()));
                 }else{
                     throw new InvalidCredentialsException("password length must be from 6 to 20");
                 }
