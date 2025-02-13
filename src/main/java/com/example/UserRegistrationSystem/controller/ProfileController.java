@@ -12,6 +12,7 @@ import org.springframework.stereotype.*;
 import org.springframework.ui.*;
 import org.springframework.validation.*;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.*;
 
 import java.util.stream.*;
 
@@ -22,7 +23,6 @@ public class ProfileController {
 
     private final IProfileService profileService;
     private final CustomSecurityExpression customSecurityExpression;
-
 
     @GetMapping("")
    public String getUserProfile(
@@ -67,6 +67,37 @@ public class ProfileController {
         model.addAttribute("auth", true);
         model.addAttribute("user", userDto);
         return "profile";
+    }
+
+    @PostMapping("/email")
+    public String updateEmail(
+            @Valid @ModelAttribute("emailDto") EmailUpdateDto emailUpdateDto,
+            Model model
+    ){
+        try{
+           profileService.updateEmail(emailUpdateDto, customSecurityExpression.getUserId());
+            return "redirect:/auth/logout";
+        }catch (EntityAlreadyExists e){
+            UserDto userDto = profileService.findById(customSecurityExpression.getUserId());
+            model.addAttribute("user", userDto);
+            model.addAttribute("error", e.getMessage());
+            return "/profile";
+        }
+    }
+    @PostMapping("/password")
+    public String updateEmail(
+            @Valid @ModelAttribute("passwordDto") PasswordDto passwordDto,
+            Model model
+    ){
+        try{
+            profileService.updatePassword(passwordDto,customSecurityExpression.getUserId());
+            return "redirect:/auth/logout";
+        }catch (EntityAlreadyExists | InvalidCredentialsException e){
+            UserDto userDto = profileService.findById(customSecurityExpression.getUserId());
+            model.addAttribute("error", e.getMessage());
+            model.addAttribute("user", userDto);
+            return "/profile";
+        }
     }
 
 }

@@ -34,22 +34,22 @@ public class AuthenticationServiceImpl implements IAuthenticationService{
 
     @Transactional
     public AuthenticationResponse authenticate(AuthDto authDto) {
-        Optional<User> user = repository.findByEmail(authDto.getEmail());
-        UserDto userDto = checkPassword(authDto, user);
-        String accessToken = jwtService.generateAccessToken(user.get());
-        revokeAllTokenByUser(user.get());
-        saveUserToken(accessToken, user.get());
+        Optional<User> userOptional = repository.findByEmail(authDto.getEmail());
+        User user = checkPassword(authDto.getPassword(), userOptional);
+        String accessToken = jwtService.generateAccessToken(user);
+        revokeAllTokenByUser(user);
+        saveUserToken(accessToken, user);
         return new AuthenticationResponse
-                (accessToken, userDto);
+                (accessToken, userMapper.toDto(user));
 
 
 
     }
-    private UserDto checkPassword(AuthDto userDto, Optional<User> isExist){
+    public User checkPassword(String password, Optional<User> isExist){
         String message = "invalid user email or password";
         if(isExist.isPresent()){
-            if (new PasswordEncoderWrapper().matches(userDto.getPassword(), isExist.get().getPassword())) {
-                return userMapper.toDto(isExist.get());
+            if (new PasswordEncoderWrapper().matches(password, isExist.get().getPassword())) {
+                return isExist.get();
             } else {
                 throw new InvalidCredentialsException(message);
             }

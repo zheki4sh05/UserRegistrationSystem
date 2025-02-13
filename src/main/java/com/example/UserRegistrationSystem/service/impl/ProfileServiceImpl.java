@@ -21,6 +21,7 @@ public class ProfileServiceImpl implements IProfileService {
 
     private final UserRepository userRepository;
     private final UserMapper userMapper;
+    private final IAuthenticationService authenticationService;
 
     @Override
     public UserDto findById(String userId) {
@@ -56,6 +57,37 @@ public class ProfileServiceImpl implements IProfileService {
         }
     }
 
+    @Override
+    @Transactional
+    public UserDto updateEmail(EmailUpdateDto emailUpdateDto, String userId) {
+        Optional<User> userOptional = userRepository.findById(UUID.fromString(userId));
+       User user = authenticationService.checkPassword(emailUpdateDto.getPassword(), userOptional);
+        user.setEmail(emailUpdateDto.getEmail());
+        userRepository.save(user);
+        return userMapper.toDto(userRepository.save(user));
+    }
+
+
+    @Override
+    @Transactional
+    public UserDto updatePassword(PasswordDto passwordDto, String userId) {
+
+        Optional<User> userOptional = userRepository.findById(UUID.fromString(userId));
+
+            User user = authenticationService.checkPassword(passwordDto.getOldPassword(), userOptional);
+            if(passwordDto.isSimilar()){
+                String newPassword = passwordDto.getNewPassword();
+                if(newPassword.length()>5 &&newPassword.length()<21){
+                    user.setPassword(new PasswordEncoderWrapper().hash(newPassword));
+                }else{
+                    throw new InvalidCredentialsException("password length must be from 6 to 20");
+                }
+                userRepository.save(user);
+                return userMapper.toDto(user);
+            }else{
+                throw new InvalidCredentialsException("passwords are not similar");
+            }
+    }
 
 
 

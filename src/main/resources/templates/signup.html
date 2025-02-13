@@ -39,7 +39,7 @@
                             <label for="password">Password</label>
                             <input type="password" class="form-control" id="password" name="password" th:value="${signUpDto.getPassword()}" required>
                         </div>
-                        <button type="submit" class="btn btn-primary btn-block">Sign up</button>
+                        <button type="submit" class="btn btn-primary btn-block" style="margin-top: 5px">Sign up</button>
                     </form>
                     <div th:if="${!error.isEmpty()}" class="alert alert-danger" style="margin-top: 10px">
                         <span th:text="${error}"  ></span>

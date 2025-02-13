@@ -3,7 +3,6 @@ package com.example.UserRegistrationSystem.mapper;
 import com.example.UserRegistrationSystem.dto.*;
 import com.example.UserRegistrationSystem.model.*;
 import com.example.UserRegistrationSystem.util.*;
-import jakarta.validation.constraints.*;
 import org.mapstruct.*;
 
 import java.sql.*;
