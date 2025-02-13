@@ -13,22 +13,22 @@ import java.time.*;
 public class SignUpDto {
 
     @NotBlank
-    @Size(min = 4, max = 20)
+    @Size(min = 4, max = 20, message = "firstname length must be from 4 to 20 ")
     private String firstname;
 
     @NotBlank
-    @Size(min = 4, max = 20)
+    @Size(min = 4, max = 20, message = "lastname length must be from 4 to 20 ")
     private String lastname;
 
     @NotBlank
-    @Email
+    @Email(message = "email not valid")
     private String email;
 
     @NotBlank
-    @Size(min = 6, max = 12)
+    @Size(min = 6, max = 12,message = "password length must be from 6 to 20")
     private String password;
 
-    @DateTimeFormat
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate birthdate;
 
 

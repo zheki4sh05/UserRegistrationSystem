@@ -4,10 +4,9 @@ import com.example.UserRegistrationSystem.dto.*;
 
 public interface IAuthenticationService {
 
-    AuthenticationResponse register(SignUpDto authDto);
+    void register(SignUpDto authDto);
 
     AuthenticationResponse authenticate(AuthDto request);
 
-    AuthenticationResponse refreshToken();
 
 }

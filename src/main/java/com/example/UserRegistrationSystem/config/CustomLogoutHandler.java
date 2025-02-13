@@ -27,15 +27,10 @@ public class CustomLogoutHandler implements LogoutHandler {
                        Authentication authentication) {
         if(request.getCookies()!=null){
             String accessToken=null;
-            String refreshToken=null;
             var cookies = request.getCookies();
             for (Cookie cookie : cookies) {
                 if (httpResponseUtils.accessCookie().equals(cookie.getName())) {
                     accessToken = cookie.getValue();
-                    response.addCookie(httpResponseUtils.deleteCookie(cookie.getName()));
-                }
-                if (httpResponseUtils.refreshCookie().equals(cookie.getName())) {
-                    refreshToken = cookie.getValue();
                     response.addCookie(httpResponseUtils.deleteCookie(cookie.getName()));
                 }
             }

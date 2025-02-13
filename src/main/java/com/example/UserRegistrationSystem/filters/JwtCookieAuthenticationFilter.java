@@ -25,23 +25,23 @@ public class JwtCookieAuthenticationFilter extends OncePerRequestFilter {
             throws ServletException, IOException {
 
 
-        if (request.getServletPath().contains("auth")) {
+        if (request.getServletPath().contains("auth") || request.getServletPath().equals("/")) {
+            if(httpResponseUtils.hasCookie(request)){
+                response.sendRedirect("/profile");
+                return;
+            }
             filterChain.doFilter(request, response);
             return;
         }
         if(request.getCookies()!=null){
             String accessToken=null;
-            String refreshToken=null;
             var cookies = request.getCookies();
             for(int i=0;i<cookies.length; i++){
                 if(httpResponseUtils.accessCookie().equals(cookies[i].getName())){
                     accessToken = cookies[i].getValue();
                 }
-                if(httpResponseUtils.refreshCookie().equals(cookies[i].getName())){
-                    refreshToken = cookies[i].getValue();
-                }
             }
-            if(accessToken!=null && refreshToken!=null){
+            if(accessToken!=null){
                 String username = jwtService.extractUsername(accessToken);
                 securityService.check(username, accessToken, request);
                 filterChain.doFilter(request, response);

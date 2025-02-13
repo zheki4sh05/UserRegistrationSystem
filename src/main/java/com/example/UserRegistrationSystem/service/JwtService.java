@@ -25,9 +25,6 @@ public class JwtService {
     @Value("${application.security.jwt.accessTokenExpire}")
     private Long accessTokenExpire;
 
-    @Value("${application.security.jwt.refresh-token-expiration}")
-    private Long refreshTokenExpire;
-
     private final TokenRepository tokenRepository;
 
 
@@ -42,26 +39,13 @@ public class JwtService {
         var tokenOptional = tokenRepository.findByAccessToken(token);
         boolean validToken= false;
 
-        if(tokenOptional.isPresent() && !tokenOptional.get().getLoggedOut()){
+        if(tokenOptional.isPresent()){
             validToken = true;
         }
-        return (username.equals(user.getUsername())) && !isTokenExpired(token) && validToken;
+        return (username.equals(user.getUsername())) && validToken;
     }
 
-    public boolean isValidRefreshToken(String token, User user) {
-        String username = extractUsername(token);
-
-        var tokenOptional = tokenRepository.findByRefreshToken(token);
-        boolean validToken= false;
-
-        if(tokenOptional.isPresent() && !tokenOptional.get().getLoggedOut()){
-            validToken = true;
-        }
-
-        return (username.equals(user.getUsername())) && !isTokenExpired(token) && validToken;
-    }
-
-    private boolean isTokenExpired(String token) {
+    public boolean isTokenExpired(String token) {
         return extractExpiration(token).before(new Date());
     }
 
@@ -86,10 +70,6 @@ public class JwtService {
 
     public String generateAccessToken(User user) {
         return generateToken(user, accessTokenExpire);
-    }
-
-    public String generateRefreshToken(User user) {
-        return generateToken(user, refreshTokenExpire );
     }
 
     private String generateToken(User user, long expireTime) {

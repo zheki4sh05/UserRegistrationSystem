@@ -33,11 +33,18 @@
                 </div>
                 <div class="form-group">
                     <label for="birthdate">Date of Birth</label>
-                    <input type="date" class="form-control" id="birthdate"  th:field="*{user.birthdate}" required>
+                    <input type="date" class="form-control" id="birthdate"  th:field="*{user.birthdate}"  required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" class="form-control" id="password" name="password">
                 </div>
 
                 <button type="submit" class="btn btn-primary btn-block" id="saveButton" disabled>Save</button>
             </form>
+            <div th:if="${!error.isEmpty()}" class="alert alert-danger" style="margin-top: 10px">
+                <span th:text="${error}"  ></span>
+            </div>
         </div>
     </div>
 </div>

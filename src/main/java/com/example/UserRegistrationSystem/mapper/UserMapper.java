@@ -18,7 +18,7 @@ public interface UserMapper {
             @Mapping(source = "email", target = "email"),
             @Mapping(source = "firstname", target = "firstname"),
             @Mapping(source = "lastname", target = "lastname"),
-            @Mapping(target = "password", ignore = true),
+            @Mapping(source = "password", target = "password"),
             @Mapping(target = "birthdate",  qualifiedByName = "local"),
     })
     UserDto toDto(User user);

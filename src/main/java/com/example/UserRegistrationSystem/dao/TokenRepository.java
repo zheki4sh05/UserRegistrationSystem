@@ -11,11 +11,9 @@ import java.util.*;
 public interface TokenRepository extends JpaRepository<Token, UUID> {
     @Query("""
 select t from Token t inner join User u on t.user.id = u.id
-where t.user.id = :userId and t.loggedOut = false
+where t.user.id = :userId
 """)
     List<Token> findAllAccessTokensByUser(@Param("userId") UUID userId);
 
     Optional<Token> findByAccessToken(String token);
-
-    Optional<Token > findByRefreshToken(String token);
 }

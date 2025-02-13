@@ -7,5 +7,4 @@ public interface IProfileService {
 
     UserDto update(UserDto userDto);
 
-    void deleteById(String userId);
 }

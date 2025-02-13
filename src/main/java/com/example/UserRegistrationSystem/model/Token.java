@@ -19,15 +19,6 @@ public class Token {
     @Column(name = "access_token")
     private String accessToken;
 
-    @Column(name = "refresh_token")
-    private String refreshToken;
-    public Boolean getLoggedOut() {
-        return loggedOut;
-    }
-
-    @Column(name = "is_logged_out")
-    private Boolean loggedOut;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;

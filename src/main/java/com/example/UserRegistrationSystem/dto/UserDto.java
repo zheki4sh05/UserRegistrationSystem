@@ -1,6 +1,7 @@
 package com.example.UserRegistrationSystem.dto;
 import jakarta.validation.constraints.*;
 import lombok.*;
+import org.springframework.format.annotation.*;
 
 import java.time.*;
 import java.util.*;
@@ -9,25 +10,24 @@ import java.util.*;
 @NoArgsConstructor
 @Data
 @Builder
-@ToString
 public class UserDto {
-    private String id;
 
-    @NotBlank(message ="LOGIN_EMPTY")
+    private String id;
+    @NotBlank
+    @Size(min = 4, max = 20, message = "firstname length must be from 4 to 20 ")
     private String firstname;
 
-    @NotBlank(message ="LOGIN_EMPTY")
+    @NotBlank
+    @Size(min = 4, max = 20, message = "lastname length must be from 4 to 20 ")
     private String lastname;
 
-    @Email(message = "EMAIL_INCORRECT")
+    @NotBlank
+    @Email(message = "email not valid")
     private String email;
 
-    @NotBlank
-    private LocalDate birthdate;
-
-    @NotBlank(message = "PASS_EMPTY")
-    @NotEmpty(message = "PASS_EMPTY")
-    @Size( min = 6,message = "PASS_INCORRECT", max = 12)
     private String password;
+
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate birthdate;
 
 }
