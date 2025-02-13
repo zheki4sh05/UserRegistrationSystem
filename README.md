@@ -3,7 +3,7 @@
 ### Установка
 Склонировать проект:
 ```bash
-git clone https://github.com/zheki4sh05/TopicHub-web-forum.git
+git clone https://github.com/zheki4sh05/UserRegistrationSystem.git
 ```
 Скомпилировать проект:
 ```bash
