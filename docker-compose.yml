@@ -1,0 +1,39 @@
+
+services:
+  javaee-app:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    container_name: backend-prod
+    restart: always
+    ports:
+      - '8080:8080'
+    depends_on:
+      - db
+    environment:
+      POSTGRES_DB: registration_system
+      DB_USERNAME: postgres
+      DB_PASSWORD: lhs22LI=D=
+      DB_URL: jdbc:postgresql://db:5432/web_forum
+      DB_DRIVER: org.postgresql.Driver
+      SECRET_KEY: 404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970
+
+  db:
+    image: postgres:latest
+    container_name: db
+    environment:
+      POSTGRES_DB: registration_system
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: lhs22LI=D=
+    ports:
+      - '5432:5432'
+    volumes:
+      - db-data:/var/lib/postgresql/data
+
+
+volumes:
+  db-data: null
+
+
+
+

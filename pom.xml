@@ -108,6 +108,19 @@
 			<artifactId>mapstruct-processor</artifactId>
 			<version>1.6.3</version>
 		</dependency>
+		<dependency>
+			<groupId>org.flywaydb</groupId>
+			<artifactId>flyway-core</artifactId>
+			<version>10.15.0</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/org.flywaydb/flyway-database-postgresql -->
+		<dependency>
+			<groupId>org.flywaydb</groupId>
+			<artifactId>flyway-database-postgresql</artifactId>
+			<version>11.3.1</version>
+			<scope>runtime</scope>
+		</dependency>
+
 
 	</dependencies>
 
@@ -122,8 +135,8 @@
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>3.11.0</version>
 				<configuration>
-					<source>21</source>
-					<target>21</target>
+					<source>16</source>
+					<target>16</target>
 					<annotationProcessorPaths>
 						<path>
 							<groupId>org.mapstruct</groupId>
