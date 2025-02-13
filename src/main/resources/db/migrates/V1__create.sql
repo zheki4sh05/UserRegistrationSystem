@@ -1,4 +1,4 @@
-CREATE SCHEMA public
+
 
 create table public.worker
 (

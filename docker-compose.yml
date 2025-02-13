@@ -14,7 +14,7 @@ services:
       POSTGRES_DB: registration_system
       DB_USERNAME: postgres
       DB_PASSWORD: lhs22LI=D=
-      DB_URL: jdbc:postgresql://db:5432/web_forum
+      DB_URL: jdbc:postgresql://db:5432/registration_system
       DB_DRIVER: org.postgresql.Driver
       SECRET_KEY: 404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970
 
