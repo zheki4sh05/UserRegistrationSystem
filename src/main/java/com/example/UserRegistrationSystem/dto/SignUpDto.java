@@ -29,7 +29,7 @@ public class SignUpDto {
     private String password;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    @Past
+    @Past(message = "date must be past")
     private LocalDate birthdate;
 
 

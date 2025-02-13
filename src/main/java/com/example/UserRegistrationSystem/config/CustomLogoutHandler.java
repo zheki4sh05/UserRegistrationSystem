@@ -12,6 +12,7 @@ import org.springframework.security.core.*;
 import org.springframework.security.web.authentication.logout.*;
 
 import java.io.*;
+import java.util.*;
 
 @Configuration
 @AllArgsConstructor
@@ -34,9 +35,11 @@ public class CustomLogoutHandler implements LogoutHandler {
                     response.addCookie(httpResponseUtils.deleteCookie(cookie.getName()));
                 }
             }
-            Token storedToken = tokenRepository.findByAccessToken(accessToken).orElse(null);
-            var tokens = tokenRepository.findAllAccessTokensByUser(storedToken.getUser().getId());
-            tokenRepository.deleteAll(tokens);
+            Optional<Token> storedToken = tokenRepository.findByAccessToken(accessToken);
+            if(storedToken.isPresent()){
+                var tokens = tokenRepository.findAllAccessTokensByUser(storedToken.get().getUser().getId());
+                tokenRepository.deleteAll(tokens);
+            }
             try {
                 response.sendRedirect("/auth/login");
             } catch (IOException e) {

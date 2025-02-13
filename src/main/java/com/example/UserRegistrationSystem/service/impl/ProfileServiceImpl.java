@@ -10,6 +10,7 @@ import com.example.UserRegistrationSystem.util.*;
 import jakarta.persistence.*;
 import jakarta.transaction.*;
 import lombok.*;
+import org.springframework.dao.*;
 import org.springframework.stereotype.*;
 
 import java.sql.*;
@@ -41,19 +42,11 @@ public class ProfileServiceImpl implements IProfileService {
             User user = userOptional.get();
             user.setFirstname(userDto.getFirstname());
             user.setLastname(userDto.getLastname());
-            user.setEmail(userDto.getEmail());
             user.setBirthdate(Timestamp.valueOf(userDto.getBirthdate().atStartOfDay()));
-            if(!userDto.getPassword().trim().isEmpty()){
-                if(userDto.getPassword().length()>5 && userDto.getPassword().length()<21){
-                    user.setPassword(new PasswordEncoderWrapper().hash(userDto.getPassword()));
-                }else{
-                    throw new InvalidCredentialsException("password length must be from 6 to 20");
-                }
-            }
             userRepository.save(user);
             return userMapper.toDto(user);
         }else{
-            throw new EntityNotFoundException("user with such email already exists");
+            throw new EntityNotFoundException("user not found");
         }
     }
 
@@ -63,8 +56,14 @@ public class ProfileServiceImpl implements IProfileService {
         Optional<User> userOptional = userRepository.findById(UUID.fromString(userId));
        User user = authenticationService.checkPassword(emailUpdateDto.getPassword(), userOptional);
         user.setEmail(emailUpdateDto.getEmail());
-        userRepository.save(user);
-        return userMapper.toDto(userRepository.save(user));
+        try {
+            userRepository.save(user);
+            return userMapper.toDto(userRepository.save(user));
+        }catch (DataIntegrityViolationException e){
+            throw new EntityAlreadyExists("such email already exists");
+        }
+
+
     }
 
 

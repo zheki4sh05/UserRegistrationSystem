@@ -4,15 +4,14 @@ import com.example.UserRegistrationSystem.dto.*;
 import com.example.UserRegistrationSystem.exceptions.*;
 import com.example.UserRegistrationSystem.service.*;
 import com.example.UserRegistrationSystem.util.*;
-import io.jsonwebtoken.*;
-import jakarta.servlet.http.*;
+import jakarta.persistence.*;
 import jakarta.validation.*;
 import lombok.*;
+import org.springframework.context.support.*;
 import org.springframework.stereotype.*;
 import org.springframework.ui.*;
 import org.springframework.validation.*;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.*;
 
 import java.util.stream.*;
 
@@ -51,21 +50,20 @@ public class ProfileController {
                     bindingResult
                             .getFieldErrors()
                             .stream()
-                            .map(e->e.getDefaultMessage())
+                            .map(DefaultMessageSourceResolvable::getDefaultMessage)
                             .collect(Collectors.joining(",")));
 
         }else{
             try{
                 userDto = profileService.update(userDto);
                 model.addAttribute("error", "");
-            }catch (EntityAlreadyExists | InvalidCredentialsException e) {
+            }catch (EntityNotFoundException e) {
                 model.addAttribute("error", e.getMessage());
             }
 
         }
         model.addAttribute("user", userDto);
         model.addAttribute("auth", true);
-        model.addAttribute("user", userDto);
         return "profile";
     }
 

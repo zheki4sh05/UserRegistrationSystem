@@ -1,6 +1,5 @@
 package com.example.UserRegistrationSystem.model;
 
-import com.example.UserRegistrationSystem.model.*;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -22,6 +21,5 @@ public class Token {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
-
 
 }

@@ -1,10 +1,10 @@
 package com.example.UserRegistrationSystem.dto;
+
 import jakarta.validation.constraints.*;
 import lombok.*;
 import org.springframework.format.annotation.*;
 
 import java.time.*;
-import java.util.*;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -25,10 +25,8 @@ public class UserDto {
     @Email(message = "email not valid")
     private String email;
 
-    private String password;
-
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    @Past
+    @Past(message = "date must be past")
     private LocalDate birthdate;
 
 }
