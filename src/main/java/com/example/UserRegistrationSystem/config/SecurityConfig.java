@@ -25,6 +25,7 @@ import org.springframework.security.web.authentication.*;
 @RequiredArgsConstructor
 public class SecurityConfig{
     private final JwtCookieAuthenticationFilter jwtCookieAuthenticationFilter;
+    private final RedirectFilter redirectFilter;
     private final CustomLogoutHandler logoutHandler;
     private final UserDetailsService userDetailsService;
     @Bean
@@ -44,6 +45,7 @@ public class SecurityConfig{
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                  .authenticationProvider(authenticationProvider(userDetailsService))
                  .addFilterBefore(jwtCookieAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+                 .addFilterBefore(redirectFilter, JwtCookieAuthenticationFilter.class)
                 .exceptionHandling(
                         e->e.accessDeniedHandler(
                                         (request, response, accessDeniedException)->response.setStatus(401)

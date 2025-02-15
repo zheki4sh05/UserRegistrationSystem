@@ -24,15 +24,6 @@ public class JwtCookieAuthenticationFilter extends OncePerRequestFilter {
             @NonNull FilterChain filterChain)
             throws ServletException, IOException {
 
-
-        if (request.getServletPath().contains("auth") || request.getServletPath().equals("/")) {
-            if(httpResponseUtils.hasCookie(request)){
-                response.sendRedirect("/profile");
-                return;
-            }
-            filterChain.doFilter(request, response);
-            return;
-        }
         if(request.getCookies()!=null){
             String accessToken=null;
             var cookies = request.getCookies();
@@ -43,16 +34,16 @@ public class JwtCookieAuthenticationFilter extends OncePerRequestFilter {
             }
             if(accessToken!=null){
                 String username = jwtService.extractUsername(accessToken);
-                securityService.check(username, accessToken, request);
-                filterChain.doFilter(request, response);
+               Boolean result =  securityService.check(username, accessToken, request);
+               if(result){
+                   filterChain.doFilter(request, response);
+               }else{
+                   response.sendRedirect("/auth/logout");
+               }
             }
         }else{
             filterChain.doFilter(request, response);
         }
-
-
-
-
     }
 
 }

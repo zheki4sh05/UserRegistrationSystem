@@ -75,7 +75,7 @@ public class ProfileController {
         try{
            profileService.updateEmail(emailUpdateDto, customSecurityExpression.getUserId());
             return "redirect:/auth/logout";
-        }catch (EntityAlreadyExists e){
+        }catch (EntityAlreadyExists | InvalidCredentialsException e){
             UserDto userDto = profileService.findById(customSecurityExpression.getUserId());
             model.addAttribute("user", userDto);
             model.addAttribute("error", e.getMessage());
